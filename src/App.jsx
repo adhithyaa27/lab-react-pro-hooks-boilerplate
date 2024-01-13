@@ -1,5 +1,5 @@
 
-import React,{useEffect,useState} from 'react';
+import React,{useCallback, useEffect,useMemo,useState} from 'react';
 import './App.css';
 
 // Do not change this
@@ -15,18 +15,18 @@ function App() {
 
 
   // should not change the LOGIC inside this function - you can make changes to the function but logic should NOT change
-  const delayFunction = ()=> {
+  const delayFunction = useMemo(()=>{
     console.log("Delay Function Ran")
     for(let index=0; index<LARGE_NUMBER; index++){};
-    return value+2;
-  
-  }
+    return value + 2;
+  },[value])
+
 
   // should not change the LOGIC inside this function - you can make changes to the function but logic should NOT change
-  const testFunction = ()=>{
+  
+  const testFunction = useCallback(()=>{
     return [value*3 ,value*4]
-  }
-
+  },[value])
   
 
   // should not change this
@@ -58,9 +58,11 @@ function App() {
     setList(testFunction);
   }
 
-  const styleTheme = {
-   backgroundColor:dark ? "black":"#ccc7c7",
-  }
+  const styleTheme = useMemo(() => {
+    return {
+      backgroundColor: dark ? 'black' : '#ccc7c7',
+    };
+  }, [dark]);
 
   return (
     
@@ -69,7 +71,7 @@ function App() {
       <h1 >{value}</h1>
       <button onClick={handleChangeValue}>Change Value</button>
       <button onClick={handleList}>Show List</button>
-      <h2>{delayFunction()}</h2>
+      <h2>{delayFunction}</h2>
       <div>
         {currentList.map((item,index)=>{
           return <h2 key={index}>{item}</h2>
